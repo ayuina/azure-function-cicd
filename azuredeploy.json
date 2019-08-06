@@ -15,7 +15,7 @@
         "shortPrefix": "[replace(parameters('prefix'), '-', '')]",
         "storageName": "[concat(variables('shortPrefix'), 'str', uniqueString(resourceGroup().id))]",
         "uploadContainerName":"images",
-        "outputContainerName":"outputs",
+        "outputContainerName":"thumbnails",
         "funcAppName": "[concat(parameters('prefix'), '-func')]",
         "funcPlanName": "[concat(variables('funcAppName'), '-plan')]",
         "appInsightName": "[concat(variables('funcAppName'), '-ai')]",
