@@ -104,13 +104,8 @@ stages:
     - task: AzurePowerShell@4
       inputs:
         azureSubscription: '$(azureConnection)'
-        scriptType: 'FilePath' # Optional. Options: filePath, inlineScript
+        scriptType: 'filePath' # Optional. Options: filePath, inlineScript
         scriptPath: './setup-eventsubscription.ps1'
         
         
         
-           # - powershell: './setup-eventsubscription.ps1'
-    #   displayName:  'Setup Event Grid Trigger'
-    #   env:
-    #     AAD_SP_KEY: $(AAD_SP_KEY)
-
