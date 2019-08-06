@@ -1,7 +1,7 @@
-$rgname = "ayuina-devops-rg"
-$funcappname = "ayuina-devops-func"
+$rgname = "$prefix-rg"
+$funcappname = "$prefix-func"
 $funcname = "thumbnail"
-$strname = "ayuinastr"
+$strname = "{0}str" -f $prefix.Replace('-', '')
 $container = "images"
 
 az functionapp show -g $rgname -n $funcappname | ConvertFrom-Json | Set-Variable targetFunc

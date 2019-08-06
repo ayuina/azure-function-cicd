@@ -2,4 +2,4 @@
 
 ## Target Architecture
 
-![Sample Architecture](./assets/sample-app-architecture)
+![Sample Architecture](./assets/sample-app-architecture.png)
