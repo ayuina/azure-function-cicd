@@ -1,4 +1,4 @@
-az login --service-principal -t $AAD_SP_TENANT -u $AAD_SP_APP -p $AAD_SP_KEY 
+az login --service-principal -t $env:AAD_SP_TENANT -u $env:AAD_SP_APP -p $env:AAD_SP_KEY 
 az account list -o table
 
 $rgname = "$env:prefix-rg"
