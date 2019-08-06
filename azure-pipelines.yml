@@ -34,7 +34,7 @@ stages:
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(prefix)-rg'
         location: '$(location)'
-        templateLocation: 'Linked Artifact'
+        templateLocation: 'Linked artifact'
         csmFile: 'azuredeploy.json'
         deploymentMode: 'Incremental'
 
