@@ -25,6 +25,7 @@ stages:
     pool:
       vmImage: 'windows-2019'
     steps:
+    - script : tree /F
     - task: DotNetCoreCLI@2
       displayName: 'Restore Package'
       inputs:
