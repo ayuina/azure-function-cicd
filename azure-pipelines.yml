@@ -12,7 +12,7 @@ variables:
   prefix: "ayuina-devops"
 
 
-pr:
+trigger:
 - dev
 
 stages:
