@@ -9,7 +9,7 @@ variables:
   buildConfiguration: 'Release'
   azureConnection: 'azure-cicd-demo-sp'
   location: 'southeastasia'
-  prefix: "ayuina-devops"
+  prefix: "ayuina"
 
 
 trigger:
@@ -94,6 +94,11 @@ stages:
         appName: '$(prefix)-func'
         package: './drop/*.zip'
       
+    - script: 'dir env:'
+
+    - script: 'setup-eventsubscription.ps1'
+
+
 
 
 

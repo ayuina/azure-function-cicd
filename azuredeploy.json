@@ -13,7 +13,7 @@
     },
     "variables": {
         "shortPrefix": "[replace(parameters('prefix'), '-', '')]",
-        "storageName": "[concat('str', uniqueString(resourceGroup().id))]",
+        "storageName": "[concat(parameters('prefix'), 'funcstr')]",
         "uploadContainerName":"images",
         "outputContainerName":"thumbnails",
         "funcAppName": "[concat(parameters('prefix'), '-func')]",
