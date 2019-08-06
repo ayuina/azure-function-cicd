@@ -84,8 +84,6 @@ stages:
         overrideParameters: '-location $(location) -prefix $(prefix)'
         deploymentMode: 'Incremental'
 
-    - script: dir $(System.DefaultWorkingDirectory)
-
     - task: AzureFunctionApp@1
       displayName: Azure Function App Deploy
       inputs:
@@ -96,7 +94,9 @@ stages:
       
     - script: 'set'
 
-    - powershell: 'setup-eventsubscription.ps1'
+    - script: dir 
+
+    - powershell: './setup-eventsubscription.ps1'
       displayName:  'Setup Event Grid Trigger'
       env:  
         prefix: $(prefix)
