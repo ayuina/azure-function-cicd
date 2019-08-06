@@ -6,11 +6,15 @@
 name: $(BuildDefinitionName)_$(Build.BuildId)_$(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
-  group: AAD_SP
-  buildConfiguration: 'Release'
-  azureConnection: 'azure-cicd-demo-sp'
-  location: 'southeastasia'
-  prefix: "ayuina"
+  - group: AAD_SP
+  - name: buildConfiguration
+    value: 'Release'
+  - name: azureConnection
+    value: 'azure-cicd-demo-sp'
+  - name: location
+    value: 'southeastasia'
+  - name: prefix
+    value: "ayuina"
 
 
 trigger:
