@@ -69,8 +69,8 @@ stages:
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(prefix)-rg'
         location: '$(location)'
-        templateLocation: 'URL of the file'
-        csmFileLink: '$(System.DefaultWorkingDirectory)/azuredeploy.json'
+        templateLocation: 'Linked artifact'
+        csmFile: 'azuredeploy.json'
         deploymentMode: 'Incremental'
 
 
