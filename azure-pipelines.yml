@@ -101,11 +101,11 @@ stages:
 
     - script: dir 
 
-    - task: AzurePowerShell@4
-      inputs:
-        azureSubscription: '$(azureConnection)'
-        scriptType: 'filePath' # Optional. Options: filePath, inlineScript
-        scriptPath: './setup-eventsubscription.ps1'
-        azurePowerShellVersion: 'latestVersion'
+    # - task: AzurePowerShell@4
+    #   inputs:
+    #     azureSubscription: '$(azureConnection)'
+    #     scriptType: 'filePath' # Optional. Options: filePath, inlineScript
+    #     scriptPath: './setup-eventsubscription.ps1'
+    #     azurePowerShellVersion: 'latestVersion'
         
         
