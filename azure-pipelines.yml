@@ -84,7 +84,6 @@ stages:
         overrideParameters: '-location $(location) -prefix $(prefix)'
         deploymentMode: 'Incremental'
 
-
     - script: dir $(System.DefaultWorkingDirectory)
 
     - task: AzureFunctionApp@1
