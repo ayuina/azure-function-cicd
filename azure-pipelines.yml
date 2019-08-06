@@ -31,7 +31,7 @@ stages:
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(prefix)-rg'
         location: '$(location)'
-        templateLocation: '/**/azuredeploy.json'
+        templateLocation: 'https://raw.githubusercontent.com/ayuina/azure-function-cicd/$(Build.SourceBranchName)/azuredeploy.json'
         deploymentMode: 'Incremental'
 
 
