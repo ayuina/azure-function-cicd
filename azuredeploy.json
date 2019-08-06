@@ -1,0 +1,223 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "String",
+            "defaultValue": "ayuina"
+        },
+        "location": {
+            "type": "String",
+            "defaultValue": "southeastasia"
+        }
+    },
+    "variables": {
+        "shortPrefix": "[replace(parameters('prefix'), '-', '')]",
+        "storageName": "[concat(variables('shortPrefix'), 'str', uniqueString(resourceGroup().id))]",
+        "uploadContainerName":"images",
+        "outputContainerName":"outputs",
+        "funcAppName": "[concat(parameters('prefix'), '-func')]",
+        "funcPlanName": "[concat(variables('funcAppName'), '-plan')]",
+        "appInsightName": "[concat(variables('funcAppName'), '-ai')]",
+        "webAppName":"[concat(parameters('prefix'), '-web')]",
+        "webPlanName": "[concat(variables('webAppName'), '-plan')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "name": "[variables('storageName')]",
+            "location": "[parameters('location')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "resources": [
+                {
+                    "type": "blobServices/containers",
+                    "apiVersion": "2019-04-01",
+                    "name": "[concat('default/', variables('uploadContainerName'))]",
+                    "dependsOn": [
+                        "[variables('storageName')]"
+                    ],
+                    "properties": {
+                        "publicAccess": "None"
+                    }
+                },
+                {
+                    "type": "blobServices/containers",
+                    "apiVersion": "2019-04-01",
+                    "name": "[concat('default/', variables('outputContainerName'))]",
+                    "dependsOn": [
+                        "[variables('storageName')]"
+                    ],
+                    "properties": {
+                        "publicAccess": "None"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[variables('funcPlanName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "name": "[variables('funcPlanName')]",
+                "computeMode": "Dynamic"
+            },
+            "sku":{
+                "name": "Y1"
+            }
+        },
+        {
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2015-05-01",
+            "name": "[variables('appInsightName')]",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "ApplicationId": "[variables('funcAppName')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('funcAppName')]",
+            "apiVersion": "2018-02-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', variables('funcPlanName'))]",
+                "[resourceId('Microsoft.Insights/components', variables('appInsightName'))]"
+            ],
+            "kind": "functionapp",
+            "properties": {
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[concat(toLower(variables('funcAppName')))]"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "10.14.1"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('appInsightName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "UPLOAD_CONTAINER_NAME",
+                            "value" : "[variables('uploadContainerName')]"
+                        },
+                        {
+                            "name": "OUTPUT_CONTAINER_NAME",
+                            "value" : "[variables('outputContainerName')]"
+                        }
+
+                    ]
+                },
+                "clientAffinityEnabled": false,
+                "reserved": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[variables('webPlanName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "S1",
+                "capacity": 2
+            },
+            "kind": "app",
+            "properties": {
+                "name": "[variables('webPlanName')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "name": "[variables('webAppName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', variables('webPlanName'))]",
+                "[resourceId('Microsoft.Insights/components', variables('appInsightName'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('webPlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "AzureStorageConfig__AccountName",
+                            "value": "[variables('storageName')]"
+                        },
+                        {
+                            "name": "AzureStorageConfig__AccountKey",
+                            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2015-05-01-preview').key1]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('appInsightName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "AzureStorageConfig__ImageContainer",
+                            "value" : "[variables('uploadContainerName')]"
+                        },
+                        {
+                            "name": "AzureStorageConfig__ThumbnailContainer",
+                            "value" : "[variables('outputContainerName')]"
+                        }
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "type": "sourcecontrols",
+                    "apiVersion": "2016-03-01",
+                    "name": "web",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+                    ],
+                    "properties" :{
+                        "RepoUrl":"https://github.com/Azure-Samples/storage-blob-upload-from-webapp.git",
+                        "branch":"master",
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
+
+        }
+    ],
+    "outputs": {
+        "appInsightKey" : {
+            "type": "string",
+            "value": "[reference(concat('microsoft.insights/components/', variables('appInsightName')), '2015-05-01').InstrumentationKey]"
+        },
+        "storageKey":{
+            "type": "string",
+            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2015-05-01-preview').key1]"
+        }
+
+    }
+}

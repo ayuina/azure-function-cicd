@@ -1,0 +1,50 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "type": "String",
+            "defaultValue": "ayuina"
+        },
+        "apikey": {
+            "type":"string",
+            "defaultValue": ""
+        }
+    },
+    "variables": {
+        "funcAppName": "[concat(parameters('prefix'), '-func')]",
+        "shortPrefix": "[replace(parameters('prefix'), '-', '')]",
+        "storageName": "[concat(variables('shortPrefix'), 'str', uniqueString(resourceGroup().id))]",
+        "uploadContainerName":"images",
+        "eventSubscriptionName":"[concat(variables('storageName'), '/Microsoft.EventGrid/image-uploaded-arm')]",
+        "eventSubscriberFunction":"thumbnail",
+        "eventGridBaseUrl": "[concat('https://',variables('funcAppName'),'.azurewebsites.net/runtime/webhooks/EventGrid')]",
+        "eventSubscriberEndpoint":"[concat(variables('eventGridBaseUrl'),'?functionName=', variables('eventSubscriberFunction'),'&code=', parameters('apikey'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts/providers/eventSubscriptions",
+            "name": "[variables('eventSubscriptionName')]",
+            "apiVersion": "2018-01-01",
+            "dependsOn": [ ],
+            "properties": {
+                "destination": {
+                    "endpointType": "WebHook",
+                    "properties": {
+                        "endpointUrl": "[variables('eventSubscriberEndpoint')]"
+                    }
+                },
+                "filter": {
+                    "subjectBeginsWith": "[concat('/blobServices/default/containers/',variables('uploadContainerName'),'/blobs/')]",
+                    "subjectEndsWith": "",
+                    "isSubjectCaseSensitive": false,
+                    "includedEventTypes": [
+                        "Microsoft.Storage.BlobCreated"
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+    }
+}
