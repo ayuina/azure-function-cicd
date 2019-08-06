@@ -62,18 +62,11 @@ stages:
       vmImage: 'windows-2019'
     steps:
 
-    - script: dir $(System.DefaultWorkingDirectory)
-
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current' 
         artifactName: drop
-        targetPath: '$(Pipeline.Workspace)' 
-
-    - script: dir $(Pipeline.Workspace)
-
-    - script: tree /F
-    - script: dir
+        targetPath: './drop' 
 
     - task: AzureResourceGroupDeployment@2
       inputs:
@@ -84,6 +77,16 @@ stages:
         templateLocation: 'Linked artifact'
         csmFile: 'azuredeploy.json'
         deploymentMode: 'Incremental'
+
+    - script: dir $(System.DefaultWorkingDirectory)
+
+    - task: AzureFunctionApp@1
+      displayName: Azure Function App Deploy
+      inputs:
+        azureSubscription: '$(azureConnection)'
+        appType: functionApp
+        appName: samplefunctionapp
+        package: './drop/*.zip'
       
 
 
