@@ -106,6 +106,6 @@ stages:
         azureSubscription: '$(azureConnection)'
         scriptType: 'filePath' # Optional. Options: filePath, inlineScript
         scriptPath: './setup-eventsubscription.ps1'
-        
+        azurePowerShellVersion: 'latestVersion'
         
         
