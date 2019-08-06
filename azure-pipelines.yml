@@ -8,12 +8,12 @@ name: $(BuildDefinitionName)_$(Build.BuildId)_$(Date:yyyyMMdd)$(Rev:.r)
 variables:
   buildConfiguration: 'Release'
   azureConnection: 'azure-cicd-demo-sp'
-  location: 'southeastasia'
+  location: 'Southeast Asia'
   prefix: "ayuina-devops"
 
 
 pr:
-- master
+- dev
 
 stages:
 
