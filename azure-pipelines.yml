@@ -96,12 +96,22 @@ stages:
 
     - script: dir 
 
-    - powershell: './setup-eventsubscription.ps1'
-      displayName:  'Setup Event Grid Trigger'
-      env:  
-        prefix: $(prefix)
+    # - powershell: './setup-eventsubscription.ps1'
+    #   displayName:  'Setup Event Grid Trigger'
+    #   env:  
+    #     prefix: $(prefix)
 
-
+    - task: AzureCLI@1
+      inputs:
+        azureSubscription: '$(azureConnection)'
+        scriptLocation: './setup-eventsubscription.cmd' # Options: inlineScript, scriptPath
+        #scriptPath: # Required when scriptLocation == ScriptPath
+        #inlineScript: # Required when scriptLocation == InlineScript
+        #arguments: # Optional
+        #addSpnToEnvironment: false # Optional
+        #useGlobalConfig: false # Optional
+        #workingDirectory: # Optional
+        #failOnStandardError: false # Optional
 
 
 
