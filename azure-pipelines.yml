@@ -30,11 +30,11 @@ stages:
       displayName: 'Restore Package'
       inputs:
         command: restore
-        projects: '/**/image-processor.csproj'
+        projects: '**/image-processor.csproj'
     - task: DotNetCoreCLI@2
       displayName: 'Build project'
       inputs:
-        projects: '/**/image-processor.csproj'
+        projects: '**/image-processor.csproj'
         arguments: '--output $(Build.BinariesDirectory)/publish_output --configuration $(buildConfiguration)'
     - task: ArchiveFiles@2
       displayName: 'Zip for Functions'
