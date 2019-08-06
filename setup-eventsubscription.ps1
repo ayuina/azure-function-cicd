@@ -12,7 +12,7 @@ write-host "retrieving target function app : $funcappname"
 az functionapp show -g $rgname -n $funcappname | ConvertFrom-Json | Set-Variable targetFunc
 
 ###
-write-host "retrieving function keys from $targetFunc.id"
+write-host "retrieving function keys "
 $manageurl = "{0}/host/default/listKeys?api-version=2018-02-01" -f $targetFunc.id
 az rest --method post --uri $manageurl | ConvertFrom-Json | Set-Variable funcKeys
 

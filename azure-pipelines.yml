@@ -101,8 +101,8 @@ stages:
 
     - script: dir 
 
-    - powershell: './setup-eventsubscription.ps1'
-      displayName:  'Setup Event Grid Trigger'
-      env:
-        AAD_SP_KEY: $(AAD_SP_KEY)
+    # - powershell: './setup-eventsubscription.ps1'
+    #   displayName:  'Setup Event Grid Trigger'
+    #   env:
+    #     AAD_SP_KEY: $(AAD_SP_KEY)
 
