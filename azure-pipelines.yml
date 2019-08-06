@@ -104,8 +104,8 @@ stages:
     - task: AzureCLI@1
       inputs:
         azureSubscription: '$(azureConnection)'
-        scriptLocation: './setup-eventsubscription.cmd' # Options: inlineScript, scriptPath
-        #scriptPath: # Required when scriptLocation == ScriptPath
+        scriptLocation: 'scriptPath' # Options: inlineScript, scriptPath
+        scriptPath: './setup-eventsubscription.cmd' # Required when scriptLocation == ScriptPath
         #inlineScript: # Required when scriptLocation == InlineScript
         #arguments: # Optional
         #addSpnToEnvironment: false # Optional
