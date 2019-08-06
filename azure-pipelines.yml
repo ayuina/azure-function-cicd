@@ -17,42 +17,6 @@ trigger:
 
 stages:
 
-- stage:
-  displayName: "Build Stage"
-  jobs:
-  - job:
-    displayName: "Creating artifacts"
-    pool:
-      vmImage: 'windows-2019'
-    steps:
-    - script : tree /F
-    - task: DotNetCoreCLI@2
-      displayName: 'Restore Package'
-      inputs:
-        command: restore
-        projects: '**/image-processor.csproj'
-    - task: DotNetCoreCLI@2
-      displayName: 'Build project'
-      inputs:
-        projects: '**/image-processor.csproj'
-        arguments: '--output $(Build.BinariesDirectory)/publish_output --configuration $(buildConfiguration)'
-    - task: ArchiveFiles@2
-      displayName: 'Zip for Functions'
-      inputs:
-        rootFolderOrFile: '$(Build.BinariesDirectory)/publish_output/'
-        includeRootFolder: false
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
-    - task: CopyFiles@2
-      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/arm'
-      inputs:
-        contents: '/**/*.json'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/arm'
-    - task: PublishPipelineArtifact@0
-      displayName: 'Publish Pipeline Artifact'
-      inputs:
-        artifactName: drop
-        targetPath: '$(Build.ArtifactStagingDirectory)'
-
 
 
 - stage:
@@ -63,13 +27,15 @@ stages:
     pool:
       vmImage: 'windows-2019'
     steps:
+    - script: tree /F
     - task: AzureResourceGroupDeployment@2
       inputs:
         azureSubscription: '$(azureConnection)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(prefix)-rg'
         location: '$(location)'
-        templateLocation: 'https://raw.githubusercontent.com/ayuina/azure-function-cicd/$(Build.SourceBranchName)/azuredeploy.json'
+        templateLocation: 'Linked Artifact'
+        csmFile: 'azuredeploy.json'
         deploymentMode: 'Incremental'
 
 
