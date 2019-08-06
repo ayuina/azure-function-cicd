@@ -1,3 +1,4 @@
+echo $prefix
 $rgname = "$prefix-rg"
 $funcappname = "$prefix-func"
 $funcname = "thumbnail"
