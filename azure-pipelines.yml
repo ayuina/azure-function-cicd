@@ -28,14 +28,15 @@ stages:
       vmImage: 'windows-2019'
     steps:
     - script: tree /F
+    - script: dir $(System.DefaultWorkingDirectory)
     - task: AzureResourceGroupDeployment@2
       inputs:
         azureSubscription: '$(azureConnection)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(prefix)-rg'
         location: '$(location)'
-        templateLocation: 'Linked artifact'
-        csmFile: 'azuredeploy.json'
+        templateLocation: 'URL of the file'
+        csmFileLink: '$(System.DefaultWorkingDirectory)/azuredeploy.json'
         deploymentMode: 'Incremental'
 
 
