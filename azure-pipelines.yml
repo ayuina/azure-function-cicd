@@ -8,7 +8,7 @@ name: $(BuildDefinitionName)_$(Build.BuildId)_$(Date:yyyyMMdd)$(Rev:.r)
 variables:
   buildConfiguration: 'Release'
   azureConnection: 'azure-cicd-demo-sp'
-  location: 'Southeast Asia'
+  location: 'southeastasia'
   prefix: "ayuina-devops"
 
 
@@ -30,7 +30,7 @@ stages:
         azureSubscription: '$(azureConnection)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(prefix)-rg'
-        location: '$(southeastasia)'
+        location: '$(location)'
         templateLocation: '/**/azuredeploy.json'
         deploymentMode: 'Incremental'
 
