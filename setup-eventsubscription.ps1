@@ -1,8 +1,7 @@
-echo $prefix
-$rgname = "$prefix-rg"
-$funcappname = "$prefix-func"
+$rgname = "$env:prefix-rg"
+$funcappname = "$env:prefix-func"
 $funcname = "thumbnail"
-$strname = "{0}str" -f $prefix.Replace('-', '')
+$strname = "{0}str" -f $env:prefix.Replace('-', '')
 $container = "images"
 
 az functionapp show -g $rgname -n $funcappname | ConvertFrom-Json | Set-Variable targetFunc
