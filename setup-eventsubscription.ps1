@@ -1,7 +1,7 @@
 $rgname = "ayuina-devops-rg"
 $funcappname = "ayuina-devops-func"
 $funcname = "thumbnail"
-$strname = "ayuinafuncstr"
+$strname = "ayuinastr"
 $container = "images"
 
 az functionapp show -g $rgname -n $funcappname | ConvertFrom-Json | Set-Variable targetFunc

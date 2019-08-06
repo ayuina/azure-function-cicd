@@ -13,7 +13,7 @@
     },
     "variables": {
         "shortPrefix": "[replace(parameters('prefix'), '-', '')]",
-        "storageName": "[concat(parameters('prefix'), 'funcstr')]",
+        "storageName": "[concat(variables('shortPrefix'), 'str')]",
         "uploadContainerName":"images",
         "outputContainerName":"thumbnails",
         "funcAppName": "[concat(parameters('prefix'), '-func')]",
@@ -52,7 +52,7 @@
                         "[variables('storageName')]"
                     ],
                     "properties": {
-                        "publicAccess": "Contanier"
+                        "publicAccess": "Container"
                     }
                 }
             ]
