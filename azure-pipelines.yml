@@ -103,4 +103,6 @@ stages:
 
     - powershell: './setup-eventsubscription.ps1'
       displayName:  'Setup Event Grid Trigger'
+      env:
+        AAD_SP_KEY: $(AAD_SP_KEY)
 
