@@ -6,6 +6,7 @@
 name: $(BuildDefinitionName)_$(Build.BuildId)_$(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
+  group: AAD_SP
   buildConfiguration: 'Release'
   azureConnection: 'azure-cicd-demo-sp'
   location: 'southeastasia'
@@ -96,25 +97,6 @@ stages:
 
     - script: dir 
 
-    # - powershell: './setup-eventsubscription.ps1'
-    #   displayName:  'Setup Event Grid Trigger'
-    #   env:  
-    #     prefix: $(prefix)
-
-    - task: AzureCLI@1
-      inputs:
-        azureSubscription: '$(azureConnection)'
-        scriptLocation: 'scriptPath' # Options: inlineScript, scriptPath
-        scriptPath: './setup-eventsubscription.cmd' # Required when scriptLocation == ScriptPath
-        #inlineScript: # Required when scriptLocation == InlineScript
-        #arguments: # Optional
-        #addSpnToEnvironment: false # Optional
-        #useGlobalConfig: false # Optional
-        #workingDirectory: # Optional
-        #failOnStandardError: false # Optional
-
-
-
-
-
+    - powershell: './setup-eventsubscription.ps1'
+      displayName:  'Setup Event Grid Trigger'
 

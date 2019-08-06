@@ -1,3 +1,6 @@
+az login --service-principal -t $AAD_SP_TENANT -u $AAD_SP_APP -p $AAD_SP_KEY 
+az account list -o table
+
 $rgname = "$env:prefix-rg"
 $funcappname = "$env:prefix-func"
 $funcname = "thumbnail"
